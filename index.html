@@ -1,0 +1,2366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Carta para Belén</title>
+  
+  <!-- Tipografía: Patrick Hand (estilo lineal cómic) y Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Iconos Lucide (vectoriales lineales) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --card-bg: #ffffff;
+      --border: #18181b;
+      --text-main: #18181b;
+      --text-muted: #71717a;
+      --accent-soft: #f4f4f5;
+      --line-shadow: 3px 3px 0px #18181b;
+      --line-shadow-sm: 2px 2px 0px #18181b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow-x: hidden;
+      background-image: radial-gradient(#e4e4e7 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    /* ===================================================
+       LOADER INICIAL ELEGANTE: "Hola Belencita Estrella"
+    =================================================== */
+    #initial-loader {
+      position: fixed;
+      inset: 0;
+      background: #ffffff;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
+    }
+
+    .loader-content {
+      text-align: center;
+      opacity: 0;
+      transform: translateY(8px);
+      animation: loaderFadeIn 0.8s ease forwards;
+    }
+
+    @keyframes loaderFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .loader-icon {
+      margin-bottom: 12px;
+      color: #18181b;
+      display: inline-flex;
+      animation: pulseSoft 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulseSoft {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+
+    .loader-title {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 2.5rem;
+      letter-spacing: 0.5px;
+      color: #18181b;
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+
+    .loader-bar-bg {
+      width: 140px;
+      height: 3px;
+      background: #f4f4f5;
+      border: 1px solid #18181b;
+      border-radius: 99px;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .loader-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: #18181b;
+      animation: loadProgress 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes loadProgress {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    #initial-loader.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* ===================================================
+       CONTENEDOR Y TARJETAS
+    =================================================== */
+    .container {
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .container.ready {
+      opacity: 1;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      padding: 30px 22px;
+      box-shadow: var(--line-shadow);
+      text-align: center;
+      position: relative;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .title-wrapper {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .title {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 2.1rem;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: #fafafa;
+      margin-bottom: 12px;
+    }
+
+    .sound-notice-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 14px;
+      background: #fafafa;
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      box-shadow: 1px 1px 0px var(--border);
+    }
+
+    .music-toggle-btn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 1600;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid var(--border);
+      box-shadow: var(--line-shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+
+    .music-toggle-btn:hover {
+      transform: scale(1.08);
+      box-shadow: var(--line-shadow);
+      background: var(--accent-soft);
+    }
+
+    .music-toggle-btn.playing {
+      animation: musicPulse 2.4s infinite ease-in-out;
+    }
+
+    @keyframes musicPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+
+    /* Sobre minimalista */
+    .envelope-box {
+      width: 86px;
+      height: 66px;
+      margin: 0 auto 20px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: #fafafa;
+      cursor: pointer;
+      box-shadow: var(--line-shadow-sm);
+      transition: all 0.2s ease;
+    }
+
+    .envelope-box:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--line-shadow);
+    }
+
+    .envelope-icon {
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Pregunta */
+    .question-box {
+      background: #fafafa;
+      border: 1.5px dashed #d4d4d8;
+      border-radius: 14px;
+      padding: 14px 12px;
+      margin-bottom: 18px;
+    }
+
+    .question-text {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 3px;
+    }
+
+    .question-hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 46px 12px 18px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      background: #ffffff;
+      color: var(--text-main);
+      box-shadow: var(--line-shadow-sm);
+      transition: all 0.15s ease;
+      text-align: center;
+    }
+
+    .input-field::-ms-reveal,
+    .input-field::-ms-clear {
+      display: none;
+    }
+
+    .input-field:focus {
+      box-shadow: var(--line-shadow);
+      background: #ffffff;
+    }
+
+    .input-field::placeholder {
+      color: #a1a1aa;
+    }
+
+    .toggle-password-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #71717a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      border-radius: 8px;
+      transition: color 0.15s ease, transform 0.15s ease;
+    }
+
+    .toggle-password-btn:hover {
+      color: #18181b;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px 18px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.3rem;
+      background: #ffffff;
+      color: var(--text-main);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: var(--line-shadow);
+      transition: all 0.15s ease;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: var(--accent-soft);
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px var(--border);
+    }
+
+    .btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px var(--border);
+    }
+
+    .feedback {
+      margin-top: 12px;
+      min-height: 22px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: opacity 0.2s ease;
+    }
+
+    .feedback-error { color: #b91c1c; }
+    .feedback-success { color: #15803d; }
+
+    .shake {
+      animation: shake 0.35s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .cursor-blink {
+      display: inline-block;
+      width: 2px;
+      height: 1.15em;
+      background-color: var(--border);
+      margin-left: 3px;
+      vertical-align: -2px;
+      animation: blinkCursor 0.75s infinite;
+    }
+
+    @keyframes blinkCursor {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .fade-enter {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ===================================================
+       ESTILOS DEL RETO 2 (TRIVIA INTERACTIVA)
+    =================================================== */
+    .trivia-arena {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      margin: 16px 0;
+      border: 1.5px dashed #d4d4d8;
+      border-radius: 16px;
+      background: #fafafa;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .btn-belen-fixed {
+      position: absolute;
+      top: 50%;
+      left: 28%;
+      transform: translate(-50%, -50%);
+      padding: 12px 24px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.35rem;
+      background: #ffffff;
+      color: #18181b;
+      border: 2px solid #18181b;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: var(--line-shadow);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 5;
+    }
+
+    .btn-belen-fixed:hover {
+      background: var(--accent-soft);
+      transform: translate(-50%, -50%) scale(1.05);
+      box-shadow: 4px 4px 0px #18181b;
+    }
+
+    .btn-runaway {
+      position: absolute;
+      top: 50%;
+      left: 72%;
+      transform: translate(-50%, -50%);
+      padding: 12px 18px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.25rem;
+      background: #ffffff;
+      color: #71717a;
+      border: 2px solid #18181b;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: var(--line-shadow-sm);
+      white-space: nowrap;
+      user-select: none;
+      -webkit-user-select: none;
+      z-index: 10;
+      transition: left 0.18s ease-out, top 0.18s ease-out, transform 0.15s ease;
+    }
+
+    .btn-runaway:active {
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+
+    /* Opciones de la Pregunta 2 */
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 18px 0 12px;
+    }
+
+    .quiz-opt-btn {
+      width: 100%;
+      padding: 13px 16px;
+      text-align: left;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.25rem;
+      line-height: 1.3;
+      background: #ffffff;
+      color: #18181b;
+      border: 2px solid #18181b;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: var(--line-shadow-sm);
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quiz-opt-btn:hover {
+      background: var(--accent-soft);
+      transform: translate(-1px, -1px);
+      box-shadow: var(--line-shadow);
+    }
+
+    .quiz-opt-btn.correct-choice {
+      background: #f4f4f5;
+      border-color: #18181b;
+      box-shadow: 3px 3px 0px #18181b;
+    }
+
+    .opt-letter {
+      width: 28px;
+      height: 28px;
+      border: 1.5px solid #18181b;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1rem;
+      background: #fafafa;
+      flex-shrink: 0;
+    }
+
+    /* ===================================================
+       ESTILOS DEL RETO 3 (RASPADITO EN CUADERNO)
+    =================================================== */
+    .notebook-paper {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      margin: 16px 0 12px;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      background-color: #ffffff;
+      /* Textura de cuaderno cuadriculado escolar */
+      background-image: 
+        linear-gradient(#e4e4e7 1.5px, transparent 1.5px),
+        linear-gradient(90deg, #e4e4e7 1.5px, transparent 1.5px);
+      background-size: 20px 20px;
+      background-position: -1px -1px;
+      box-shadow: var(--line-shadow-sm);
+      overflow: hidden;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notebook-margin-line {
+      position: absolute;
+      left: 36px;
+      top: 0;
+      bottom: 0;
+      width: 1.5px;
+      background: #fca5a5;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .scratch-secret-message {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 3.4rem;
+      color: #18181b;
+      letter-spacing: 0.5px;
+      line-height: 1;
+      text-align: center;
+      pointer-events: none;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-left: 20px;
+      transform: rotate(-3deg);
+    }
+
+    .scratch-secret-sub {
+      font-size: 1.2rem;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #27272a;
+    }
+
+    .scratch-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+      cursor: crosshair;
+      touch-action: none;
+      transition: opacity 0.6s ease;
+    }
+
+    /* ===================================================
+       VIDEO EN PANTALLA COMPLETA CON FADE LENTO
+    =================================================== */
+    #video-fullscreen-overlay {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: #000000;
+      z-index: 1500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: auto;
+      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #video-fullscreen-overlay.active {
+      opacity: 1;
+    }
+
+    #video-fullscreen-overlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .fullscreen-video-player {
+      width: 100%;
+      height: 100%;
+      max-width: 100vw;
+      max-height: 100dvh;
+      object-fit: contain;
+      background: #000000;
+      display: block;
+      outline: none;
+      border: none;
+    }
+
+    .skip-video-floating-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 1510;
+      background: rgba(24, 24, 27, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #ffffff;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.85;
+      transition: all 0.2s ease;
+    }
+
+    .skip-video-floating-btn:hover {
+      background: rgba(24, 24, 27, 0.95);
+      opacity: 1;
+      transform: scale(1.04);
+      border-color: rgba(255, 255, 255, 0.7);
+    }
+
+    .letter-paper-sheet {
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 26px 22px;
+      box-shadow: var(--line-shadow);
+      text-align: left;
+      position: relative;
+      background-image: repeating-linear-gradient(transparent, transparent 29px, #f4f4f5 29px, #f4f4f5 30px);
+      line-height: 30px;
+      margin: 16px 0;
+      transform-origin: top center;
+      animation: letterUnfold 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes letterUnfold {
+      0% {
+        opacity: 0;
+        transform: scale(0.92) rotateX(-15deg);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotateX(0deg);
+      }
+    }
+
+    .letter-header {
+      border-bottom: 1.5px dashed #d4d4d8;
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .letter-to {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.65rem;
+      font-weight: 600;
+      color: #18181b;
+    }
+
+    .letter-from {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.35rem;
+      color: #71717a;
+    }
+
+    .letter-body {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.35rem;
+      color: #27272a;
+      line-height: 1.6;
+    }
+
+    .letter-body p {
+      margin-bottom: 16px;
+    }
+
+    .letter-sign {
+      margin-top: 22px;
+      text-align: right;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.6rem;
+      color: #18181b;
+    }
+
+    .final-dedication-box {
+      margin-top: 18px;
+      padding: 18px 16px;
+      background: #fafafa;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--line-shadow-sm);
+      text-align: center;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .final-dedication-text {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.35rem;
+      color: #18181b;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .final-dedication-author {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #18181b;
+    }
+
+    /* ===================================================
+       LABERINTO VERTICAL REDISEÑADO (SOLUBLE + RETADOR)
+    =================================================== */
+    .maze-container {
+      position: relative;
+      width: 290px;
+      height: 380px;
+      margin: 0 auto 16px;
+      border: 2.5px solid var(--border);
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: var(--line-shadow-sm);
+      overflow: hidden;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    #maze-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Muñecos de palitos */
+    .stickman-wrap {
+      position: absolute;
+      width: 44px;
+      height: 56px;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    #stick-guido {
+      cursor: grab;
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    #stick-guido.dragging {
+      cursor: grabbing;
+    }
+
+    .stick-name {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1;
+      margin-top: -2px;
+      background: #ffffff;
+      padding: 0 4px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      box-shadow: 1px 1px 0px var(--border);
+      white-space: nowrap;
+    }
+
+    /* Corazón al encontrarse */
+    .meeting-heart {
+      position: absolute;
+      z-index: 20;
+      color: #18181b;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.3);
+      pointer-events: none;
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .meeting-heart.show {
+      opacity: 1;
+      transform: translate(-50%, -135%) scale(1.2);
+      animation: float-heart 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes float-heart {
+      from { transform: translate(-50%, -135%) scale(1.2); }
+      to { transform: translate(-50%, -150%) scale(1.35); }
+    }
+
+    .instruction-tag {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .success-actions {
+      display: none;
+      margin-top: 14px;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .success-actions.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==============================================
+       LOADER INICIAL: "Hola Belencita Estrella" (2 segundos)
+  =============================================== -->
+  <div id="initial-loader">
+    <div class="loader-content">
+      <div class="loader-icon">
+        <i data-lucide="sparkles" style="width: 28px; height: 28px; stroke-width: 2;"></i>
+      </div>
+      <h1 class="loader-title">Hola Belencita Estrella</h1>
+      <div class="loader-bar-bg">
+        <div class="loader-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" id="main-container">
+    
+    <!-- ==============================================
+         FASE 0: CARTA Y CONTRASEÑA
+    =============================================== -->
+    <div class="card" id="lock-card">
+      <div class="sound-notice-pill">
+        <i data-lucide="volume-2" style="width: 14px; height: 14px; stroke-width: 2.2;"></i>
+        <span>Activa el sonido para una mejor experiencia</span>
+      </div>
+
+      <div class="title-wrapper">
+        <i data-lucide="mail" style="width: 22px; height: 22px; stroke-width: 2.2;"></i>
+        <h1 class="title">Carta para Belén</h1>
+      </div>
+      <p class="subtitle">Solo quien tiene la respuesta correcta puede abrirla.</p>
+
+      <div class="envelope-box" id="envelope-elem" onclick="focusInput()">
+        <div class="envelope-icon" id="lock-icon">
+          <i data-lucide="lock" style="width: 26px; height: 26px; stroke-width: 2;"></i>
+        </div>
+      </div>
+
+      <div class="question-box">
+        <div class="question-text">¿Dónde nos conocimos?</div>
+        <div class="question-hint">Una pregunta que solo tú y yo recordamos.</div>
+      </div>
+
+      <form id="password-form" onsubmit="checkAnswer(event)">
+        <div class="input-wrapper">
+          <input 
+            type="password" 
+            id="answer-input" 
+            class="input-field" 
+            placeholder="Escribe tu respuesta..." 
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button 
+            type="button" 
+            id="toggle-password-btn" 
+            class="toggle-password-btn" 
+            onclick="togglePasswordVisibility()" 
+            title="Mostrar u ocultar texto"
+          >
+            <i data-lucide="eye" id="eye-icon" style="width: 20px; height: 20px; stroke-width: 2;"></i>
+          </button>
+        </div>
+
+        <button type="submit" class="btn" id="submit-btn">
+          <span>Abrir carta</span>
+          <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+        </button>
+      </form>
+
+      <div class="feedback" id="feedback-msg"></div>
+    </div>
+
+    <!-- ==============================================
+         FASE INTRO / AVISO DE RETOS CON TEXTO ESCRIBIÉNDOSE
+    =============================================== -->
+    <div class="card hidden" id="intro-card">
+      <div class="badge">
+        <i data-lucide="check" style="width: 14px; height: 14px; stroke-width: 3;"></i>
+        <span>Acceso correcto</span>
+      </div>
+
+      <div class="title-wrapper">
+        <i data-lucide="heart" style="width: 22px; height: 22px; stroke-width: 2.2;"></i>
+        <h2 class="title" id="typewriter-title" style="font-size: 1.95rem; min-height: 2.4rem;"></h2>
+      </div>
+
+      <p class="subtitle" id="typewriter-sub" style="margin-bottom: 12px; min-height: 1.2rem;"></p>
+
+      <div class="question-box" style="margin: 18px 0; text-align: center; min-height: 90px; display: flex; align-items: center; justify-content: center;">
+        <p id="typewriter-text" style="font-family: 'Patrick Hand', cursive; font-size: 1.3rem; line-height: 1.45; color: #27272a;"></p>
+      </div>
+
+      <div id="intro-btn-wrap" style="opacity: 0; transform: translateY(8px); transition: all 0.4s ease; pointer-events: none;">
+        <button class="btn" onclick="goToLevel1()">
+          <span>Comenzar reto 1</span>
+          <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         FASE 1: RETO 1 - LABERINTO VERTICAL REDISEÑADO
+    =============================================== -->
+    <div class="card hidden" id="level1-card">
+      <div class="badge">
+        <i data-lucide="compass" style="width: 14px; height: 14px; stroke-width: 2.5;"></i>
+        <span>Reto 1</span>
+      </div>
+
+      <div class="title-wrapper">
+        <h2 class="title" style="font-size: 1.95rem;">El camino hacia Belén</h2>
+      </div>
+
+      <div class="instruction-tag">
+        <i data-lucide="move" style="width: 14px; height: 14px;"></i>
+        <span>Arrastra a Guido esquivando los muros hasta llegar a Belén</span>
+      </div>
+
+      <!-- Lienzo del Laberinto -->
+      <div class="maze-container" id="maze-box">
+        <canvas id="maze-canvas" width="290" height="380"></canvas>
+
+        <!-- Corazón al encontrarse -->
+        <div class="meeting-heart" id="meeting-heart">
+          <i data-lucide="heart" style="width: 32px; height: 32px; fill: #18181b; stroke-width: 1.5;"></i>
+        </div>
+
+        <!-- Guido (Arrancará arriba a la izquierda) -->
+        <div class="stickman-wrap" id="stick-guido">
+          <svg viewBox="0 0 50 60" width="32" height="40">
+            <circle cx="25" cy="12" r="9" stroke="#18181b" stroke-width="2.5" fill="#ffffff" />
+            <circle cx="22" cy="11" r="1" fill="#18181b" />
+            <circle cx="28" cy="11" r="1" fill="#18181b" />
+            <path d="M 22 15 Q 25 18 28 15" stroke="#18181b" stroke-width="1.8" fill="none" stroke-linecap="round" />
+            <line x1="25" y1="21" x2="25" y2="40" stroke="#18181b" stroke-width="2.5" stroke-linecap="round" />
+            <line x1="14" y1="30" x2="36" y2="30" stroke="#18181b" stroke-width="2.5" stroke-linecap="round" />
+            <line x1="25" y1="40" x2="16" y2="56" stroke="#18181b" stroke-width="2.5" stroke-linecap="round" />
+            <line x1="25" y1="40" x2="34" y2="56" stroke="#18181b" stroke-width="2.5" stroke-linecap="round" />
+          </svg>
+          <span class="stick-name">Guido</span>
+        </div>
+
+        <!-- Belén (Abajo a la derecha) -->
+        <div class="stickman-wrap" id="stick-belen">
+          <svg viewBox="0 0 50 60" width="32" height="40">
+            <path d="M 32 4 Q 35 2 34 7 Q 37 8 32 7 Z" fill="#18181b" />
+            <circle cx="25" cy="12" r="9" stroke="#18181b" stroke-width="2.5" fill="#ffffff" />
+            <circle cx="22" cy="11" r="1" fill="#18181b" />
+            <circle cx="28" cy="11" r="1" fill="#18181b" />
+            <path d="M 22 15 Q 25 18 28 15" stroke="#18181b" stroke-width="1.8" fill="none" stroke-linecap="round" />
+            <line x1="25" y1="21" x2="25" y2="33" stroke="#18181b" stroke-width="2.5" stroke-linecap="round" />
+            <polygon points="25,31 16,43 34,43" stroke="#18181b" stroke-width="2.2" fill="#ffffff" stroke-linejoin="round" />
+            <line x1="15" y1="28" x2="35" y2="28" stroke="#18181b" stroke-width="2.5" stroke-linecap="round" />
+            <line x1="20" y1="43" x2="19" y2="56" stroke="#18181b" stroke-width="2.2" stroke-linecap="round" />
+            <line x1="30" y1="43" x2="31" y2="56" stroke="#18181b" stroke-width="2.2" stroke-linecap="round" />
+          </svg>
+          <span class="stick-name">Belén</span>
+        </div>
+      </div>
+
+      <div class="feedback" id="maze-status">
+        <span>Conduce a Guido sin chocar con las paredes</span>
+      </div>
+
+      <div class="success-actions" id="maze-next-box">
+        <button class="btn" onclick="nextLevelAfterMaze()">
+          <span>Siguiente reto</span>
+          <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         FASE 2: RETO 2 - LA TRIVIA DE BELÉN
+    =============================================== -->
+    <div class="card hidden" id="level2-card">
+      <div class="badge">
+        <i data-lucide="sparkles" style="width: 14px; height: 14px; stroke-width: 2.5;"></i>
+        <span id="trivia-badge-text">Reto 2 • Pregunta 1 de 2</span>
+      </div>
+
+      <!-- PREGUNTA 1: EL BOTÓN QUE HUYE -->
+      <div id="trivia-q1-section">
+        <div class="title-wrapper">
+          <h2 class="title" style="font-size: 1.85rem; line-height: 1.25;">
+            ¿Quién es la chica que no sale de mi cabeza desde hace unos días?
+          </h2>
+        </div>
+
+        <p class="subtitle" style="margin-bottom: 10px;">
+          Solo una de las opciones es la correcta...
+        </p>
+
+        <!-- Arena donde 'Alguien más' se escapa -->
+        <div class="trivia-arena" id="runaway-arena">
+          <button class="btn-belen-fixed" id="btn-belen" onclick="onPickBelen()">
+            <i data-lucide="heart" style="width: 18px; height: 18px; fill: #18181b;"></i>
+            <span>Belén</span>
+          </button>
+
+          <button class="btn-runaway" id="btn-runaway">
+            <span>Alguien más</span>
+          </button>
+        </div>
+
+        <div class="feedback" id="trivia-q1-feedback">
+          <span>Intenta elegir una opción... 👀</span>
+        </div>
+
+        <div class="success-actions" id="trivia-q1-next">
+          <button class="btn" onclick="goToTriviaQ2()">
+            <span>Siguiente pregunta</span>
+            <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- PREGUNTA 2: EL CUADERNO EN CLASES -->
+      <div id="trivia-q2-section" class="hidden">
+        <div class="title-wrapper">
+          <h2 class="title" style="font-size: 1.85rem; line-height: 1.25;">
+            Sinceramente... ¿por qué te rayaba tanto el cuaderno en clases?
+          </h2>
+        </div>
+
+        <p class="subtitle" style="margin-bottom: 12px;">
+          Responde con total sinceridad...
+        </p>
+
+        <div class="quiz-options">
+          <button class="quiz-opt-btn" onclick="onPickQ2('A', this)">
+            <span class="opt-letter">A</span>
+            <span>Porque me gustaba molestarte un poquito</span>
+          </button>
+
+          <button class="quiz-opt-btn" onclick="onPickQ2('B', this)">
+            <span class="opt-letter">B</span>
+            <span>Porque era mi excusa para hablar con la chica más linda del salón</span>
+          </button>
+
+          <button class="quiz-opt-btn" onclick="onPickQ2('C', this)">
+            <span class="opt-letter">C</span>
+            <span>Obviamente ambas son 100% verdad :)</span>
+          </button>
+        </div>
+
+        <div class="feedback" id="trivia-q2-feedback"></div>
+
+        <div class="success-actions" id="trivia-q2-next">
+          <button class="btn" onclick="completeReto2()">
+            <span>Continuar</span>
+            <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==============================================
+         FASE 3: RETO 3 - EL MENSAJE EN EL CUADERNO
+    =============================================== -->
+    <div class="card hidden" id="level3-card">
+      <div class="badge">
+        <i data-lucide="edit-3" style="width: 14px; height: 14px; stroke-width: 2.5;"></i>
+        <span>Reto 3</span>
+      </div>
+
+      <div class="title-wrapper">
+        <h2 class="title" style="font-size: 1.95rem; line-height: 1.25;">
+          El secreto en el cuaderno
+        </h2>
+      </div>
+
+      <div class="instruction-tag">
+        <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+        <span>Rasca la hoja con tu dedo para descubrir el secreto</span>
+      </div>
+
+      <!-- Cuaderno escolar con textura cuadriculada -->
+      <div class="notebook-paper" id="notebook-arena">
+        <div class="notebook-margin-line"></div>
+
+        <!-- Mensaje a mano alzada oculto -->
+        <div class="scratch-secret-message">
+          <span>Me gustas</span>
+          <div class="scratch-secret-sub">
+            <i data-lucide="heart" style="width: 20px; height: 20px; fill: #18181b;"></i>
+            <span style="font-size: 1.35rem;">mucho Belencita</span>
+          </div>
+        </div>
+
+        <!-- Capa superficial para raspar -->
+        <canvas class="scratch-canvas" id="scratch-canvas"></canvas>
+      </div>
+
+      <div class="feedback" id="scratch-status">
+        <span>Desliza tu dedo sobre la hoja para raspar... ✍️</span>
+      </div>
+
+      <div class="success-actions" id="scratch-next-box">
+        <button class="btn" onclick="goToVideoTransition()">
+          <span>Ver un recuerdo</span>
+          <i data-lucide="video" style="width: 20px; height: 20px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         FASE 4: VIDEO EN PANTALLA COMPLETA
+    =============================================== -->
+    <div id="video-fullscreen-overlay" class="hidden">
+      <video 
+        id="memory-video" 
+        class="fullscreen-video-player" 
+        src="Rayandocuaderno.mp4" 
+        playsinline 
+        webkit-playsinline
+        muted
+        preload="auto"
+      >
+        Tu navegador no soporta la reproducción de video.
+      </video>
+
+      <button 
+        type="button" 
+        id="skip-video-btn" 
+        class="skip-video-floating-btn" 
+        onclick="openFinalLetter()" 
+        title="Continuar a la carta"
+      >
+        <span>Ver carta</span>
+        <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+      </button>
+    </div>
+
+    <!-- ==============================================
+         FASE 5: LA CARTA FINAL DESPLEGABLE
+    =============================================== -->
+    <div class="card hidden" id="letter-card">
+      <div class="letter-paper-sheet">
+        <div class="letter-header">
+          <span class="letter-to">Para: Belén</span>
+          <span class="letter-from">De: Guido</span>
+        </div>
+
+        <div class="letter-body" id="letter-body-content"></div>
+
+        <div class="letter-sign hidden" id="letter-signature">
+          Con mucho cariño,<br>
+          <strong>Guido</strong>
+        </div>
+      </div>
+
+      <!-- Botón final -->
+      <div id="final-btn-wrap" class="hidden" style="margin-top: 18px;">
+        <button class="btn" id="btn-final-detail" onclick="revealFinalDetail()">
+          <span>Presiona aquí</span>
+        </button>
+      </div>
+
+      <!-- Dedicatoria final que se muestra al presionar el botón -->
+      <div id="final-dedication" class="hidden final-dedication-box">
+        <p class="final-dedication-text">
+          Hecho con mucho cariño un 13 de octubre de 2026.
+        </p>
+        <p class="final-dedication-author">
+          Guido
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Elemento de audio en bucle -->
+  <audio id="bg-music" src="leberch-love-story-437006.mp3" preload="auto" loop></audio>
+
+  <!-- Botón flotante para pausar / reanudar música -->
+  <button type="button" id="music-toggle-btn" class="music-toggle-btn hidden" onclick="toggleMusic()" title="Silenciar / Activar música">
+    <i data-lucide="volume-2" id="music-icon" style="width: 18px; height: 18px; stroke-width: 2;"></i>
+  </button>
+
+  <script>
+    lucide.createIcons();
+
+    /* ==========================================================
+       CONTROL DEL LOADER (2 segundos de duración)
+    ========================================================== */
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const loader = document.getElementById('initial-loader');
+        const container = document.getElementById('main-container');
+        
+        loader.classList.add('fade-out');
+        container.classList.add('ready');
+
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 600);
+      }, 2000);
+    });
+
+    /* ==========================================================
+       VALIDACIÓN DE CONTRASEÑA (FASE 0)
+    ========================================================== */
+    const VALID_ANSWERS = [
+      "cima",
+      "el cima",
+      "en el cima",
+      "instituto",
+      "el instituto",
+      "en el instituto",
+      "academia",
+      "la academia",
+      "en la academia",
+      "colegio cima",
+      "instituto cima",
+      "academia cima"
+    ];
+
+    const ERROR_MESSAGES = [
+      "Respuesta incorrecta. Piensa en el lugar donde coincidimos por primera vez.",
+      "Cerca... recuerda las aulas o salones donde nos conocimos.",
+      "Pista: empieza con 'C' o el lugar donde estudiábamos.",
+      "Intenta otra vez, sé que recuerdas el lugar."
+    ];
+    let errorCount = 0;
+
+    function normalizeText(text) {
+      return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s]/g, "")
+        .trim();
+    }
+
+    function focusInput() {
+      document.getElementById('answer-input').focus();
+    }
+
+    function togglePasswordVisibility() {
+      const input = document.getElementById('answer-input');
+      const btn = document.getElementById('toggle-password-btn');
+      if (!input || !btn) return;
+
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerHTML = '<i data-lucide="eye-off" id="eye-icon" style="width: 20px; height: 20px; stroke-width: 2;"></i>';
+      } else {
+        input.type = 'password';
+        btn.innerHTML = '<i data-lucide="eye" id="eye-icon" style="width: 20px; height: 20px; stroke-width: 2;"></i>';
+      }
+      lucide.createIcons();
+      input.focus();
+    }
+
+    /* ==========================================================
+       CONTROL DE MÚSICA DE FONDO (LOVE STORY)
+    ========================================================== */
+    let musicStarted = false;
+
+    function playBackgroundMusic() {
+      if (musicStarted) return;
+      const music = document.getElementById('bg-music');
+      const musicBtn = document.getElementById('music-toggle-btn');
+      if (!music) return;
+
+      music.volume = 0;
+      music.loop = true;
+      const playPromise = music.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          musicStarted = true;
+          // Subida suave y romántica del volumen hasta 0.75
+          let vol = 0;
+          const interval = setInterval(() => {
+            vol += 0.05;
+            if (vol >= 0.75) {
+              music.volume = 0.75;
+              clearInterval(interval);
+            } else {
+              music.volume = vol;
+            }
+          }, 80);
+
+          if (musicBtn) {
+            musicBtn.classList.remove('hidden');
+            musicBtn.classList.add('playing');
+            lucide.createIcons();
+          }
+        }).catch(err => {
+          console.log("Audio en espera de interacción o bloqueado:", err);
+        });
+      }
+    }
+
+    function toggleMusic() {
+      const music = document.getElementById('bg-music');
+      const btn = document.getElementById('music-toggle-btn');
+      if (!music || !btn) return;
+
+      if (music.paused) {
+        music.play().then(() => {
+          btn.classList.add('playing');
+          btn.innerHTML = '<i data-lucide="volume-2" id="music-icon" style="width: 18px; height: 18px; stroke-width: 2;"></i>';
+          lucide.createIcons();
+        }).catch(() => {});
+      } else {
+        music.pause();
+        btn.classList.remove('playing');
+        btn.innerHTML = '<i data-lucide="volume-x" id="music-icon" style="width: 18px; height: 18px; stroke-width: 2;"></i>';
+        lucide.createIcons();
+      }
+    }
+
+    function checkAnswer(e) {
+      e.preventDefault();
+      const input = document.getElementById('answer-input');
+      const card = document.getElementById('lock-card');
+      const rawValue = input.value;
+      const normalizedValue = normalizeText(rawValue);
+
+      if (!normalizedValue) {
+        showFeedback("Por favor escribe una respuesta.", "feedback-error", "alert-circle");
+        card.classList.add('shake');
+        setTimeout(() => card.classList.remove('shake'), 350);
+        return;
+      }
+
+      const isMatch = VALID_ANSWERS.some(ans => {
+        const normAns = normalizeText(ans);
+        return normalizedValue === normAns || normalizedValue.includes(normAns);
+      });
+
+      if (isMatch) {
+        showFeedback("Respuesta correcta. Abriendo...", "feedback-success", "check");
+
+        // Iniciar música de fondo en bucle tras superar la contraseña
+        playBackgroundMusic();
+        
+        confetti({
+          particleCount: 35,
+          spread: 50,
+          origin: { y: 0.6 },
+          colors: ['#18181b', '#71717a', '#d4d4d8', '#ffffff']
+        });
+
+        const lockIconContainer = document.getElementById('lock-icon');
+        lockIconContainer.innerHTML = '<i data-lucide="unlock" style="width: 26px; height: 26px; stroke-width: 2;"></i>';
+        lucide.createIcons();
+
+        setTimeout(() => {
+          card.classList.add('hidden');
+          const introCard = document.getElementById('intro-card');
+          introCard.classList.remove('hidden');
+          introCard.classList.add('fade-enter');
+          lucide.createIcons();
+          startTypewriterIntro();
+        }, 850);
+
+      } else {
+        const msg = ERROR_MESSAGES[errorCount % ERROR_MESSAGES.length];
+        errorCount++;
+        showFeedback(msg, "feedback-error", "alert-circle");
+
+        card.classList.add('shake');
+        setTimeout(() => card.classList.remove('shake'), 350);
+        input.select();
+      }
+    }
+
+    function showFeedback(text, className, iconName) {
+      const feedback = document.getElementById('feedback-msg');
+      feedback.innerHTML = `
+        <i data-lucide="${iconName}" style="width: 15px; height: 15px; stroke-width: 2.2;"></i>
+        <span>${text}</span>
+      `;
+      feedback.className = `feedback ${className}`;
+      lucide.createIcons();
+    }
+
+    /* Efecto de máquina de escribir letra por letra */
+    function typeText(element, text, speed = 36) {
+      return new Promise(resolve => {
+        let index = 0;
+        element.innerHTML = '<span class="typed-text"></span><span class="cursor-blink"></span>';
+        const typedSpan = element.querySelector('.typed-text');
+        const cursor = element.querySelector('.cursor-blink');
+
+        function addChar() {
+          if (index < text.length) {
+            typedSpan.textContent += text.charAt(index);
+            index++;
+            setTimeout(addChar, speed);
+          } else {
+            if (cursor) cursor.remove();
+            resolve();
+          }
+        }
+        addChar();
+      });
+    }
+
+    async function startTypewriterIntro() {
+      const titleElem = document.getElementById('typewriter-title');
+      const subElem   = document.getElementById('typewriter-sub');
+      const textElem  = document.getElementById('typewriter-text');
+      const btnWrap   = document.getElementById('intro-btn-wrap');
+
+      // Limpiar estados previos
+      titleElem.innerHTML = '';
+      subElem.innerHTML = '';
+      textElem.innerHTML = '';
+      btnWrap.style.opacity = '0';
+      btnWrap.style.transform = 'translateY(8px)';
+      btnWrap.style.pointerEvents = 'none';
+
+      // 1. Título principal solicitado
+      await typeText(titleElem, "Pues ya sabía que lo recordarías Belencita :)", 38);
+
+      await new Promise(r => setTimeout(r, 220));
+
+      // 2. Subtítulo suave
+      await typeText(subElem, "Ese lugar fue el inicio de algo especial.", 28);
+
+      await new Promise(r => setTimeout(r, 260));
+
+      // 3. Frase del reto
+      await typeText(textElem, '"Para leer todo primero debes pasar unos retos... ¿Lista para el primero?"', 32);
+
+      // 4. Aparición suave del botón al terminar de escribir
+      setTimeout(() => {
+        btnWrap.style.opacity = '1';
+        btnWrap.style.transform = 'translateY(0)';
+        btnWrap.style.pointerEvents = 'auto';
+      }, 300);
+    }
+
+    function goToLevel1() {
+      document.getElementById('intro-card').classList.add('hidden');
+      const levelCard = document.getElementById('level1-card');
+      levelCard.classList.remove('hidden');
+      levelCard.classList.add('fade-enter');
+      lucide.createIcons();
+
+      initMaze();
+    }
+
+
+    /* ==========================================================
+       LÓGICA DEL LABERINTO REDISEÑADO CON VERDADERA DIFICULTAD
+    ========================================================== */
+    let mazeInitialized = false;
+    let isDragging = false;
+    let mazeWon = false;
+
+    // Dimensiones del lienzo
+    const MAZE_W = 290;
+    const MAZE_H = 380;
+
+    // Posición inicial de Guido (Arriba-Izquierda) y Belén (Abajo-Derecha)
+    const START_POS = { x: 42, y: 45 };
+    const GOAL_POS  = { x: 248, y: 335 };
+    const GUIDO_RADIUS = 12; // Radio físico de colisión
+
+    let guidoPos = { x: START_POS.x, y: START_POS.y };
+
+    /*
+      MUROS DEL LABERINTO (Rediseño 100% verificado y soluble con 4 callejones sin salida)
+      Rejilla 5 columnas x 6 filas (columnas de 51.6px, filas de 58px)
+      Camino garantizado y abierto:
+      (0,0) -> (1,0) -> (2,0) -> (2,1) -> (1,1) -> (1,2) -> (1,3) -> (2,3) -> (3,3) -> (3,4) -> (2,4) -> (2,5) -> (3,5) -> (4,5) [Belén]
+    */
+    const WALLS = [
+      // Marco perimetral
+      [16, 16, 274, 16],    // Superior
+      [274, 16, 274, 364],  // Derecho
+      [16, 364, 274, 364],  // Inferior
+      [16, 16, 16, 364],    // Izquierdo
+
+      // Muros verticales interiores
+      [68, 74, 68, 190],     // Bloquea callejón sin salida (0,1)-(0,2)
+      [68, 248, 68, 364],    // Bloquea callejón sin salida (0,4)
+      [120, 248, 120, 364],   // Divisorio inferior izquierdo
+      [171, 74, 171, 132],   // Divisorio de pasillo superior
+      [223, 74, 223, 248],   // Bloquea callejón sin salida largo derecho (4,1)-(4,2)
+
+      // Muros horizontales interiores
+      [68, 74, 120, 74],     // Fila 0
+      [171, 74, 223, 74],
+      [120, 132, 223, 132],  // Fila 1
+      [16, 190, 68, 190],    // Cierra callejón (0,2)
+      [120, 190, 274, 190],  // Cierra callejón derecho (4,2) y (3,2)
+      [68, 248, 171, 248],   // Fila 3
+      [223, 248, 274, 248],  // Fila 3
+      [16, 306, 120, 306],   // Cierra callejón (0,4)
+      [171, 306, 274, 306]   // Cierra callejón (4,4)
+    ];
+
+    // Distancia más corta de un punto (px, py) a un segmento de recta
+    function distToSegment(px, py, x1, y1, x2, y2) {
+      const l2 = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+      if (l2 === 0) return Math.hypot(px - x1, py - y1);
+      let t = ((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / l2;
+      t = Math.max(0, Math.min(1, t));
+      const projX = x1 + t * (x2 - x1);
+      const projY = y1 + t * (y2 - y1);
+      return Math.hypot(px - projX, py - projY);
+    }
+
+    function collidesWithWall(x, y, r) {
+      for (let i = 0; i < WALLS.length; i++) {
+        const w = WALLS[i];
+        if (distToSegment(x, y, w[0], w[1], w[2], w[3]) < r) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function initMaze() {
+      const canvas = document.getElementById('maze-canvas');
+      const ctx = canvas.getContext('2d');
+      const belenElem = document.getElementById('stick-belen');
+
+      // Resetear posición fija de Belén (meta abajo-derecha)
+      belenElem.style.left = `${GOAL_POS.x}px`;
+      belenElem.style.top  = `${GOAL_POS.y}px`;
+
+      // Resetear posición de Guido siempre arriba a la izquierda
+      guidoPos = { x: START_POS.x, y: START_POS.y };
+      mazeWon = false;
+      updateGuidoVisual(START_POS.x, START_POS.y);
+
+      drawMaze(ctx);
+
+      if (!mazeInitialized) {
+        setupMazePointerEvents();
+        mazeInitialized = true;
+      }
+    }
+
+    function drawMaze(ctx) {
+      ctx.clearRect(0, 0, MAZE_W, MAZE_H);
+
+      // Fondo blanco
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, MAZE_W, MAZE_H);
+
+      // Círculo tenue de inicio de Guido (arriba-izquierda)
+      ctx.fillStyle = "#f4f4f5";
+      ctx.beginPath();
+      ctx.arc(START_POS.x, START_POS.y, 20, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Círculo punteado de meta de Belén (abajo-derecha)
+      ctx.beginPath();
+      ctx.arc(GOAL_POS.x, GOAL_POS.y, 20, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = "#a1a1aa";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Dibujar muros con líneas negras limpias y esquinas redondeadas
+      ctx.strokeStyle = "#18181b";
+      ctx.lineWidth = 3.5;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      WALLS.forEach(w => {
+        ctx.beginPath();
+        ctx.moveTo(w[0], w[1]);
+        ctx.lineTo(w[2], w[3]);
+        ctx.stroke();
+      });
+    }
+
+    function updateGuidoVisual(x, y) {
+      const guidoElem = document.getElementById('stick-guido');
+      guidoElem.style.left = `${x}px`;
+      guidoElem.style.top  = `${y}px`;
+    }
+
+    /* ==========================================================
+       FÍSICAS CONTINUAS DE MOVIMIENTO Y COLISIÓN (WALL-SLIDING)
+    ========================================================== */
+    function moveGuidoWithPhysics(targetX, targetY) {
+      if (mazeWon) return;
+
+      const dx = targetX - guidoPos.x;
+      const dy = targetY - guidoPos.y;
+      const distance = Math.hypot(dx, dy);
+
+      if (distance < 0.5) return;
+
+      // Sub-stepping de 2px para evitar saltarse muros a alta velocidad
+      const steps = Math.ceil(distance / 2.0);
+      const stepDx = dx / steps;
+      const stepDy = dy / steps;
+
+      for (let i = 0; i < steps; i++) {
+        const nextX = guidoPos.x + stepDx;
+        if (!collidesWithWall(nextX, guidoPos.y, GUIDO_RADIUS)) {
+          guidoPos.x = nextX;
+        }
+
+        const nextY = guidoPos.y + stepDy;
+        if (!collidesWithWall(guidoPos.x, nextY, GUIDO_RADIUS)) {
+          guidoPos.y = nextY;
+        }
+      }
+
+      updateGuidoVisual(guidoPos.x, guidoPos.y);
+      checkGoalReached();
+    }
+
+    function setupMazePointerEvents() {
+      const mazeBox = document.getElementById('maze-box');
+      const guidoElem = document.getElementById('stick-guido');
+
+      function getCoords(e) {
+        const rect = mazeBox.getBoundingClientRect();
+        const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+        const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+        return {
+          x: clientX - rect.left,
+          y: clientY - rect.top
+        };
+      }
+
+      function onPointerStart(e) {
+        if (mazeWon) return;
+        const pt = getCoords(e);
+        const dist = Math.hypot(pt.x - guidoPos.x, pt.y - guidoPos.y);
+
+        // Detectar toque cerca de Guido
+        if (dist < 46) {
+          isDragging = true;
+          guidoElem.classList.add('dragging');
+          e.preventDefault();
+        }
+      }
+
+      function onPointerMove(e) {
+        if (!isDragging || mazeWon) return;
+        e.preventDefault();
+        const pt = getCoords(e);
+        moveGuidoWithPhysics(pt.x, pt.y);
+      }
+
+      function onPointerEnd() {
+        if (isDragging) {
+          isDragging = false;
+          guidoElem.classList.remove('dragging');
+        }
+      }
+
+      mazeBox.addEventListener('pointerdown', onPointerStart, { passive: false });
+      window.addEventListener('pointermove', onPointerMove, { passive: false });
+      window.addEventListener('pointerup', onPointerEnd);
+      window.addEventListener('pointercancel', onPointerEnd);
+    }
+
+    function checkGoalReached() {
+      const dist = Math.hypot(guidoPos.x - GOAL_POS.x, guidoPos.y - GOAL_POS.y);
+
+      // Meta alcanzada
+      if (dist < 30 && !mazeWon) {
+        mazeWon = true;
+        isDragging = false;
+        document.getElementById('stick-guido').classList.remove('dragging');
+
+        // Posicionar a Guido junto a Belén
+        guidoPos.x = GOAL_POS.x - 22;
+        guidoPos.y = GOAL_POS.y;
+        updateGuidoVisual(guidoPos.x, guidoPos.y);
+
+        // Mostrar corazón flotante
+        const heart = document.getElementById('meeting-heart');
+        heart.style.left = `${GOAL_POS.x - 11}px`;
+        heart.style.top  = `${GOAL_POS.y}px`;
+        heart.classList.add('show');
+
+        // Celebración con confeti sutil
+        confetti({
+          particleCount: 40,
+          spread: 60,
+          origin: { y: 0.65 },
+          colors: ['#18181b', '#71717a', '#d4d4d8', '#ffffff']
+        });
+
+        // Actualizar mensaje
+        const status = document.getElementById('maze-status');
+        status.innerHTML = `
+          <i data-lucide="heart" style="width: 16px; height: 16px; stroke-width: 2.2; fill: #18181b;"></i>
+          <span style="font-weight: 600;">¡Guido llegó con Belén!</span>
+        `;
+        status.className = "feedback feedback-success";
+        lucide.createIcons();
+
+        // Mostrar botón de avance
+        document.getElementById('maze-next-box').classList.add('active');
+      }
+    }
+
+    /* ==========================================================
+       LÓGICA DEL RETO 2: TRIVIA Y BOTÓN ESCURRIDIZO
+    ========================================================== */
+    const RUNAWAY_PHRASES = [
+      "¡Ni lo intentes!",
+      "¡Por aquí no es!",
+      "¡Ese botón no existe!",
+      "¡Te equivocaste!",
+      "¡Prueba con Belén!",
+      "¡Imposible tocarme!",
+      "¡Error 404! 🙈",
+      "¡Casi casi! 🤭"
+    ];
+    let phraseIndex = 0;
+    let runawayEventsAttached = false;
+    let q1Completed = false;
+
+    function nextLevelAfterMaze() {
+      document.getElementById('level1-card').classList.add('hidden');
+      const level2 = document.getElementById('level2-card');
+      level2.classList.remove('hidden');
+      level2.classList.add('fade-enter');
+      lucide.createIcons();
+
+      initReto2();
+    }
+
+    function initReto2() {
+      q1Completed = false;
+      const arena = document.getElementById('runaway-arena');
+      const runawayBtn = document.getElementById('btn-runaway');
+      const feedback = document.getElementById('trivia-q1-feedback');
+
+      // Posición inicial del botón que huye
+      runawayBtn.style.left = '72%';
+      runawayBtn.style.top = '50%';
+      runawayBtn.querySelector('span').textContent = 'Alguien más';
+      runawayBtn.style.display = 'inline-flex';
+
+      function moveRunawayButton(e) {
+        if (q1Completed) return;
+        if (e) e.preventDefault();
+
+        const arenaRect = arena.getBoundingClientRect();
+        const btnRect = runawayBtn.getBoundingClientRect();
+
+        const btnW = btnRect.width || 120;
+        const btnH = btnRect.height || 45;
+
+        // Margen seguro para no salirse de la caja en ningún celular
+        const minX = btnW / 2 + 10;
+        const maxX = arenaRect.width - btnW / 2 - 10;
+        const minY = btnH / 2 + 10;
+        const maxY = arenaRect.height - btnH / 2 - 10;
+
+        let newX = Math.random() * (maxX - minX) + minX;
+        let newY = Math.random() * (maxY - minY) + minY;
+
+        // Evitar que caiga justo encima del botón de Belén (lado izquierdo)
+        if (newX < arenaRect.width * 0.45 && newY > arenaRect.height * 0.25 && newY < arenaRect.height * 0.75) {
+          newX = arenaRect.width * 0.7; // mandar al lado derecho
+        }
+
+        runawayBtn.style.left = `${newX}px`;
+        runawayBtn.style.top = `${newY}px`;
+
+        // Cambiar frase graciosa
+        runawayBtn.querySelector('span').textContent = RUNAWAY_PHRASES[phraseIndex % RUNAWAY_PHRASES.length];
+        phraseIndex++;
+
+        // Mensaje sutil
+        feedback.innerHTML = `
+          <i data-lucide="alert-circle" style="width: 15px; height: 15px;"></i>
+          <span>¡Ese botón no quiere que lo toques! 🤭</span>
+        `;
+        feedback.className = "feedback feedback-error";
+        lucide.createIcons();
+      }
+
+      if (!runawayEventsAttached) {
+        // En móviles se activa con touchstart o pointerdown antes de que logre hacer click
+        runawayBtn.addEventListener('pointerdown', moveRunawayButton, { passive: false });
+        runawayBtn.addEventListener('touchstart', moveRunawayButton, { passive: false });
+        runawayBtn.addEventListener('mouseenter', moveRunawayButton);
+        runawayEventsAttached = true;
+      }
+    }
+
+    function onPickBelen() {
+      if (q1Completed) return;
+      q1Completed = true;
+
+      // Confeti festivo
+      confetti({
+        particleCount: 45,
+        spread: 60,
+        origin: { y: 0.6 },
+        colors: ['#18181b', '#71717a', '#d4d4d8', '#ffffff']
+      });
+
+      // Ocultar suavemente el botón que huye
+      const runawayBtn = document.getElementById('btn-runaway');
+      runawayBtn.style.opacity = '0';
+      setTimeout(() => runawayBtn.style.display = 'none', 200);
+
+      const feedback = document.getElementById('trivia-q1-feedback');
+      feedback.innerHTML = `
+        <i data-lucide="heart" style="width: 16px; height: 16px; stroke-width: 2.2; fill: #18181b;"></i>
+        <span style="font-weight: 600;">¡Obvio que tú! No había otra opción posible :)</span>
+      `;
+      feedback.className = "feedback feedback-success";
+      lucide.createIcons();
+
+      document.getElementById('trivia-q1-next').classList.add('active');
+    }
+
+    function goToTriviaQ2() {
+      document.getElementById('trivia-q1-section').classList.add('hidden');
+      const q2 = document.getElementById('trivia-q2-section');
+      q2.classList.remove('hidden');
+      q2.classList.add('fade-enter');
+
+      document.getElementById('trivia-badge-text').textContent = 'Reto 2 • Pregunta 2 de 2';
+      lucide.createIcons();
+    }
+
+    function onPickQ2(option, btnElem) {
+      const feedback = document.getElementById('trivia-q2-feedback');
+
+      if (option === 'A') {
+        feedback.innerHTML = `
+          <i data-lucide="info" style="width: 15px; height: 15px;"></i>
+          <span>Cierto... ¡pero había una razón mucho más importante detrás! 👀</span>
+        `;
+        feedback.className = "feedback";
+      } else if (option === 'B') {
+        feedback.innerHTML = `
+          <i data-lucide="info" style="width: 15px; height: 15px;"></i>
+          <span>Totalmente cierto... aunque molestarte también era divertido jaja</span>
+        `;
+        feedback.className = "feedback";
+      } else if (option === 'C') {
+        // Opción ganadora
+        document.querySelectorAll('.quiz-opt-btn').forEach(b => b.classList.remove('correct-choice'));
+        btnElem.classList.add('correct-choice');
+
+        confetti({
+          particleCount: 50,
+          spread: 70,
+          origin: { y: 0.65 },
+          colors: ['#18181b', '#71717a', '#d4d4d8', '#ffffff']
+        });
+
+        feedback.innerHTML = `
+          <i data-lucide="check-circle" style="width: 16px; height: 16px; stroke-width: 2.2;"></i>
+          <span style="font-weight: 600;">¡Exacto! Era la mejor excusa de todas para tener tu atención :)</span>
+        `;
+        feedback.className = "feedback feedback-success";
+
+        document.getElementById('trivia-q2-next').classList.add('active');
+      }
+      lucide.createIcons();
+    }
+
+    function completeReto2() {
+      document.getElementById('level2-card').classList.add('hidden');
+      const level3 = document.getElementById('level3-card');
+      level3.classList.remove('hidden');
+      level3.classList.add('fade-enter');
+      lucide.createIcons();
+
+      // Iniciar el raspadito
+      setTimeout(() => {
+        initScratchCard();
+      }, 100);
+    }
+
+    /* ==========================================================
+       LÓGICA DEL RETO 3: CUADERNO Y RASPADITO INTERACTIVO
+    ========================================================== */
+    let scratchInitialized = false;
+    let isScratching = false;
+    let scratchWon = false;
+    let scratchStrokeCount = 0;
+    let scratchLastX = 0;
+    let scratchLastY = 0;
+
+    function initScratchCard() {
+      const arena = document.getElementById('notebook-arena');
+      const canvas = document.getElementById('scratch-canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Ajustar tamaño exacto del canvas al contenedor
+      const w = arena.offsetWidth || 340;
+      const h = arena.offsetHeight || 220;
+      canvas.width = w;
+      canvas.height = h;
+
+      // Dibujar la capa superficial para raspar (gris suave con texto cómic)
+      ctx.fillStyle = '#f4f4f5';
+      ctx.fillRect(0, 0, w, h);
+
+      // Marco punteado suave
+      ctx.strokeStyle = '#d4d4d8';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.strokeRect(10, 10, w - 20, h - 20);
+      ctx.setLineDash([]);
+
+      // Letras de invitación a raspar
+      ctx.fillStyle = '#52525b';
+      ctx.font = '600 22px "Patrick Hand", cursive';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Rasca aquí con tu dedo... ✍️', w / 2, h / 2 - 4);
+
+      ctx.fillStyle = '#a1a1aa';
+      ctx.font = '14px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('(hay algo escrito para ti)', w / 2, h / 2 + 24);
+
+      function getCoords(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+        const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+        return {
+          x: clientX - rect.left,
+          y: clientY - rect.top
+        };
+      }
+
+      function scratchLine(x1, y1, x2, y2) {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.lineWidth = 44; // Trazo grueso para raspar cómodamente con el dedo
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      }
+
+      function checkProgress() {
+        scratchStrokeCount++;
+        // Medir porcentaje cada 10 trazos para máximo rendimiento a 60fps
+        if (scratchStrokeCount % 10 !== 0 || scratchWon) return;
+
+        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imgData.data;
+        let cleared = 0;
+        let sampled = 0;
+
+        // Muestrear cada 16 píxeles
+        for (let i = 3; i < data.length; i += 4 * 16) {
+          sampled++;
+          if (data[i] < 128) cleared++;
+        }
+
+        const ratio = cleared / sampled;
+
+        // Si ya raspó más del 35% de la tarjeta: ¡REVELACIÓN TOTAL!
+        if (ratio > 0.35 && !scratchWon) {
+          scratchWon = true;
+
+          // Desvanecer el resto suavemente
+          canvas.style.opacity = '0';
+          setTimeout(() => {
+            canvas.style.display = 'none';
+          }, 600);
+
+          // Confeti suave
+          confetti({
+            particleCount: 45,
+            spread: 65,
+            origin: { y: 0.65 },
+            colors: ['#18181b', '#71717a', '#d4d4d8', '#ffffff']
+          });
+
+          // Actualizar feedback
+          const status = document.getElementById('scratch-status');
+          status.innerHTML = `
+            <i data-lucide="heart" style="width: 16px; height: 16px; stroke-width: 2.2; fill: #18181b;"></i>
+            <span style="font-weight: 600;">¡Descubriste lo que siempre quise decirte! :)</span>
+          `;
+          status.className = "feedback feedback-success";
+          lucide.createIcons();
+
+          // Mostrar botón final
+          document.getElementById('scratch-next-box').classList.add('active');
+        }
+      }
+
+      function onScratchStart(e) {
+        if (scratchWon) return;
+        isScratching = true;
+        const pt = getCoords(e);
+        scratchLastX = pt.x;
+        scratchLastY = pt.y;
+        scratchLine(pt.x, pt.y, pt.x, pt.y);
+        e.preventDefault();
+      }
+
+      function onScratchMove(e) {
+        if (!isScratching || scratchWon) return;
+        e.preventDefault();
+        const pt = getCoords(e);
+        scratchLine(scratchLastX, scratchLastY, pt.x, pt.y);
+        scratchLastX = pt.x;
+        scratchLastY = pt.y;
+        checkProgress();
+      }
+
+      function onScratchEnd() {
+        isScratching = false;
+      }
+
+      if (!scratchInitialized) {
+        canvas.addEventListener('pointerdown', onScratchStart, { passive: false });
+        window.addEventListener('pointermove', onScratchMove, { passive: false });
+        window.addEventListener('pointerup', onScratchEnd);
+        window.addEventListener('pointercancel', onScratchEnd);
+        scratchInitialized = true;
+      }
+    }
+
+    function goToVideoTransition() {
+      document.getElementById('level3-card').classList.add('hidden');
+
+      const overlay = document.getElementById('video-fullscreen-overlay');
+      const video = document.getElementById('memory-video');
+
+      if (!overlay || !video) {
+        openFinalLetter();
+        return;
+      }
+
+      overlay.classList.remove('hidden');
+      void overlay.offsetWidth;
+      overlay.classList.add('active');
+      lucide.createIcons();
+
+      video.muted = true;
+      video.currentTime = 0;
+
+      // Autoplay inmediato (muteado para compatibilidad móvil total)
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          console.log("Error al reproducir video:", err);
+        });
+      }
+
+      overlay.onclick = (e) => {
+        if (e.target.id === 'skip-video-btn' || e.target.closest('#skip-video-btn')) return;
+        if (video.paused) {
+          video.play().catch(() => {});
+        }
+      };
+
+      // Al finalizar el video, desvanecer suavemente y abrir la carta
+      video.onended = () => {
+        overlay.classList.add('fade-out');
+        setTimeout(() => {
+          openFinalLetter();
+        }, 800);
+      };
+    }
+
+    /* ==========================================================
+       LÓGICA DE LA CARTA FINAL: MÁQUINA DE ESCRIBIR
+    ========================================================== */
+    const LETTER_PARAGRAPHS = [
+      "Bueno Belén, como te dije... me encantas y me gustas mucho. Qué bonito volver a hablar contigo después de tantos años.",
+      "Recordar aquellos días en el CIMA siempre me saca una sonrisa, rayarte el cuaderno solo para tener cualquier pretexto y poder hablarte, verte reír y quedarme mirando a la chica más linda del salón.",
+      "Aquel día en Solari, me agarraste desprevenido con ese beso y aunque haya salido un poco raro, me gustó y me pusiste nervioso jaja, sé que tú lo olvidaste, pero incluso en el beso en ese momento tú usabas brackets y como que se enredó en mi diente o algo así jajaja, pero fue uno de los mejores momentos en mi vida, el primer beso.",
+      "Dicen que el tiempo cambia muchas cosas, pero reencontrarme y volver a hablar contigo se siente tan especial. Eres una chica maravillosa e inteligente y eso me atrae mucho, cada conversación contigo por Instagram me hace sonreír y me alegra el día.",
+      "No sé qué nos depare el destino, pero pase lo que pase me gustaría siempre poder compartir momentos contigo."
+    ];
+
+    let letterTypewriterActive = false;
+    let letterTypewriterSkipped = false;
+
+    function finishLetterDisplay() {
+      letterTypewriterActive = false;
+      const letterBody = document.getElementById('letter-body-content');
+      const signature = document.getElementById('letter-signature');
+
+      if (!letterBody) return;
+
+      const oldCursor = letterBody.querySelector('.cursor-blink');
+      if (oldCursor) oldCursor.remove();
+
+      letterBody.innerHTML = LETTER_PARAGRAPHS.map(p => `<p>${p}</p>`).join('');
+
+      if (signature) {
+        signature.classList.remove('hidden');
+        signature.classList.add('fade-enter');
+
+        // Confeti al terminar de revelarse la firma
+        confetti({
+          particleCount: 50,
+          spread: 70,
+          origin: { y: 0.7 },
+          colors: ['#18181b', '#71717a', '#d4d4d8', '#ffffff']
+        });
+
+        // Mostrar botón final al terminar la carta
+        const finalBtnWrap = document.getElementById('final-btn-wrap');
+        if (finalBtnWrap) {
+          setTimeout(() => {
+            finalBtnWrap.classList.remove('hidden');
+            finalBtnWrap.classList.add('fade-enter');
+            finalBtnWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 500);
+        }
+      }
+    }
+
+    function revealFinalDetail() {
+      const btnWrap = document.getElementById('final-btn-wrap');
+      const dedication = document.getElementById('final-dedication');
+
+      if (btnWrap) btnWrap.classList.add('hidden');
+      if (dedication) {
+        dedication.classList.remove('hidden');
+        dedication.classList.add('fade-enter');
+        dedication.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        confetti({
+          particleCount: 55,
+          spread: 75,
+          origin: { y: 0.75 },
+          colors: ['#18181b', '#71717a', '#d4d4d8', '#ffffff']
+        });
+      }
+    }
+
+    async function startLetterTypewriter() {
+      const letterBody = document.getElementById('letter-body-content');
+      const signature = document.getElementById('letter-signature');
+      const finalBtnWrap = document.getElementById('final-btn-wrap');
+      const dedication = document.getElementById('final-dedication');
+
+      if (!letterBody) return;
+
+      letterTypewriterActive = true;
+      letterTypewriterSkipped = false;
+      letterBody.innerHTML = '';
+
+      if (signature) signature.classList.add('hidden');
+      if (finalBtnWrap) finalBtnWrap.classList.add('hidden');
+      if (dedication) dedication.classList.add('hidden');
+
+      // Esperar a que la tarjeta de la carta termine su animación de desdoble
+      await new Promise(r => setTimeout(r, 850));
+
+      if (letterTypewriterSkipped) return;
+
+      const baseSpeed = 46; // Velocidad pausada tipo máquina de escribir
+
+      for (let pIndex = 0; pIndex < LETTER_PARAGRAPHS.length; pIndex++) {
+        if (letterTypewriterSkipped) return;
+
+        const pText = LETTER_PARAGRAPHS[pIndex];
+        const pElem = document.createElement('p');
+        pElem.innerHTML = '<span class="p-typed"></span><span class="cursor-blink"></span>';
+        letterBody.appendChild(pElem);
+
+        const typedSpan = pElem.querySelector('.p-typed');
+        const cursor = pElem.querySelector('.cursor-blink');
+
+        for (let charIndex = 0; charIndex < pText.length; charIndex++) {
+          if (letterTypewriterSkipped) return;
+
+          const char = pText.charAt(charIndex);
+          typedSpan.textContent += char;
+
+          if (charIndex % 12 === 0 || charIndex === pText.length - 1) {
+            cursor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+
+          let waitTime = baseSpeed;
+          if (char === ',' || char === ';') {
+            waitTime = 175;
+          } else if (char === '.' || char === '!' || char === '?') {
+            waitTime = 340;
+          }
+
+          await new Promise(r => setTimeout(r, waitTime));
+        }
+
+        if (cursor) cursor.remove();
+        await new Promise(r => setTimeout(r, 480));
+      }
+
+      if (!letterTypewriterSkipped) {
+        finishLetterDisplay();
+      }
+    }
+
+    function openFinalLetter() {
+      const overlay = document.getElementById('video-fullscreen-overlay');
+      const video = document.getElementById('memory-video');
+
+      if (video) {
+        video.pause();
+        video.onended = null;
+      }
+
+      if (overlay) {
+        overlay.classList.add('fade-out');
+        setTimeout(() => {
+          overlay.classList.add('hidden');
+          overlay.classList.remove('active', 'fade-out');
+        }, 700);
+      }
+
+      const letterCard = document.getElementById('letter-card');
+      letterCard.classList.remove('hidden');
+      letterCard.classList.add('fade-enter');
+      lucide.createIcons();
+
+      // Gran lluvia de confeti
+      confetti({
+        particleCount: 65,
+        spread: 80,
+        origin: { y: 0.55 },
+        colors: ['#18181b', '#71717a', '#d4d4d8', '#ffffff']
+      });
+      setTimeout(() => {
+        confetti({
+          particleCount: 35,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 35,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+      }, 300);
+
+      // Iniciar la animación de máquina de escribir
+      startLetterTypewriter();
+    }
+  </script>
+</body>
+</html>
