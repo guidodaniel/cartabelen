@@ -902,6 +902,308 @@
     .success-actions.active {
       display: block;
     }
+
+    /* ===================================================
+       ESTILOS DEL MENÚ PRINCIPAL
+    =================================================== */
+    .menu-btn-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 12px 0 16px;
+    }
+
+    .menu-choice-btn {
+      width: 100%;
+      padding: 16px 18px;
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--line-shadow);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .menu-choice-btn:hover {
+      background: var(--accent-soft);
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0px var(--border);
+    }
+
+    .menu-choice-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px var(--border);
+    }
+
+    .menu-choice-icon {
+      width: 46px;
+      height: 46px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+      color: var(--text-main);
+      flex-shrink: 0;
+      box-shadow: 1px 1px 0px var(--border);
+    }
+
+    .menu-choice-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-choice-title {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+
+    .menu-choice-sub {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .menu-choice-arrow {
+      color: var(--text-muted);
+      transition: transform 0.2s ease, color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .menu-choice-btn:hover .menu-choice-arrow {
+      transform: translateX(4px);
+      color: var(--text-main);
+    }
+
+    /* ===================================================
+       ESTILOS DEL MÓDULO DE AUDIOS Y AUDÍFONOS
+    =================================================== */
+    .headphones-hint-box {
+      background: #fafafa;
+      border: 1.5px dashed #d4d4d8;
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin: 14px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+    }
+
+    .headphones-anim-wrap {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .headphones-icon-circle {
+      width: 42px;
+      height: 42px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      box-shadow: 1px 1px 0px var(--border);
+      animation: gentleBob 2.4s infinite ease-in-out;
+    }
+
+    @keyframes gentleBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    .sound-wave {
+      position: absolute;
+      border-radius: 50%;
+      border: 1.5px solid #18181b;
+      opacity: 0;
+      animation: soundWavePulse 2.2s infinite ease-out;
+    }
+
+    .sound-wave.wave-1 { width: 42px; height: 42px; animation-delay: 0s; }
+    .sound-wave.wave-2 { width: 42px; height: 42px; animation-delay: 1.1s; }
+
+    @keyframes soundWavePulse {
+      0% {
+        transform: scale(0.95);
+        opacity: 0.7;
+      }
+      100% {
+        transform: scale(1.65);
+        opacity: 0;
+      }
+    }
+
+    .headphones-hint-copy {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hint-strong {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .hint-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Tarjeta del Reproductor de AUDIO 1 */
+    .audio-player-card {
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: var(--line-shadow);
+      position: relative;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .audio-player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .audio-track-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      background: #f4f4f5;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .audio-timer {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-family: 'Plus Jakarta Sans', monospace;
+    }
+
+    .hearts-stage-box {
+      position: relative;
+      width: 100%;
+      height: 135px;
+      border-radius: 14px;
+      background: #fafafa;
+      border: 1.5px dashed #d4d4d8;
+      overflow: hidden;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #hearts-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .audio-play-round-btn {
+      position: relative;
+      z-index: 3;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid var(--border);
+      box-shadow: var(--line-shadow);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      transition: all 0.15s ease;
+    }
+
+    .audio-play-round-btn:hover {
+      transform: scale(1.08);
+      background: var(--accent-soft);
+      box-shadow: 4px 4px 0px var(--border);
+    }
+
+    .audio-play-round-btn:active {
+      transform: scale(0.96);
+      box-shadow: 1px 1px 0px var(--border);
+    }
+
+    .audio-play-round-btn.playing {
+      animation: pulsePlayBtn 2s infinite ease-in-out;
+    }
+
+    @keyframes pulsePlayBtn {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+
+    .audio-player-meta {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .audio-track-title {
+      display: block;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.35rem;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .audio-track-hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .audio-scrub-bar {
+      width: 100%;
+      height: 8px;
+      background: #f4f4f5;
+      border: 1.5px solid var(--border);
+      border-radius: 99px;
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .audio-scrub-fill {
+      height: 100%;
+      width: 0%;
+      background: #18181b;
+      transition: width 0.1s linear;
+    }
   </style>
 </head>
 <body>
@@ -980,6 +1282,114 @@
     </div>
 
     <!-- ==============================================
+         MENÚ PRINCIPAL (AUDIOS Y EL RETO)
+    =============================================== -->
+    <div class="card hidden" id="menu-card">
+      <div class="badge">
+        <i data-lucide="sparkles" style="width: 14px; height: 14px; stroke-width: 2.5;"></i>
+        <span>Menú Principal</span>
+      </div>
+
+      <div class="title-wrapper">
+        <h1 class="title" style="font-size: 2.1rem; line-height: 1.15;">¿Por dónde empezamos?</h1>
+      </div>
+      <p class="subtitle" style="margin-bottom: 22px;">Elige lo que quieras ver primero...</p>
+
+      <div class="menu-btn-container">
+        <!-- Botón AUDIOS -->
+        <button type="button" class="menu-choice-btn" onclick="openAudiosModule()">
+          <div class="menu-choice-icon">
+            <i data-lucide="headphones" style="width: 26px; height: 26px;"></i>
+          </div>
+          <div class="menu-choice-text">
+            <span class="menu-choice-title">AUDIOS</span>
+            <span class="menu-choice-sub">Un audio especial para ti</span>
+          </div>
+          <i data-lucide="arrow-right" class="menu-choice-arrow" style="width: 20px; height: 20px;"></i>
+        </button>
+
+        <!-- Botón EL RETO -->
+        <button type="button" class="menu-choice-btn" onclick="startRetoFlow()">
+          <div class="menu-choice-icon">
+            <i data-lucide="compass" style="width: 26px; height: 26px;"></i>
+          </div>
+          <div class="menu-choice-text">
+            <span class="menu-choice-title">EL RETO</span>
+            <span class="menu-choice-sub">Los retos y tu carta final</span>
+          </div>
+          <i data-lucide="arrow-right" class="menu-choice-arrow" style="width: 20px; height: 20px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         MÓDULO DE AUDIOS (AUDIO 1 CON CORAZONES FLOTANTES)
+    =============================================== -->
+    <div class="card hidden" id="audios-card">
+      <div class="badge">
+        <i data-lucide="headphones" style="width: 14px; height: 14px; stroke-width: 2.5;"></i>
+        <span>Audios</span>
+      </div>
+
+      <div class="title-wrapper">
+        <h2 class="title" style="font-size: 2rem; line-height: 1.15;">Audios para ti</h2>
+      </div>
+
+      <!-- Animación para usar audífonos -->
+      <div class="headphones-hint-box">
+        <div class="headphones-anim-wrap">
+          <span class="sound-wave wave-1"></span>
+          <span class="sound-wave wave-2"></span>
+          <div class="headphones-icon-circle">
+            <i data-lucide="headphones" style="width: 22px; height: 22px; stroke-width: 2.2;"></i>
+          </div>
+        </div>
+        <div class="headphones-hint-copy">
+          <span class="hint-strong">Usa audífonos</span>
+          <span class="hint-sub">para una mejor experiencia</span>
+        </div>
+      </div>
+
+      <!-- Tarjeta de AUDIO 1 -->
+      <div class="audio-player-card">
+        <div class="audio-player-header">
+          <div class="audio-track-tag">
+            <i data-lucide="volume-2" style="width: 14px; height: 14px;"></i>
+            <span>AUDIO 1</span>
+          </div>
+          <span class="audio-timer" id="audio1-timer">00:00 / 00:00</span>
+        </div>
+
+        <!-- Área con animación de corazones suaves flotantes -->
+        <div class="hearts-stage-box" id="hearts-stage-box">
+          <canvas id="hearts-canvas" width="340" height="140"></canvas>
+          
+          <button type="button" class="audio-play-round-btn" id="audio1-play-btn" onclick="toggleLoveAudio()" title="Reproducir / Pausar">
+            <i data-lucide="play" id="audio1-play-icon" style="width: 28px; height: 28px; fill: #18181b; margin-left: 3px;"></i>
+          </button>
+        </div>
+
+        <div class="audio-player-meta">
+          <span class="audio-track-title">Mensaje de audio</span>
+          <span class="audio-track-hint" id="audio1-hint">Presiona play para escuchar</span>
+        </div>
+
+        <!-- Barra de progreso interactiva -->
+        <div class="audio-scrub-bar" id="audio1-scrub-bar" onclick="seekLoveAudio(event)">
+          <div class="audio-scrub-fill" id="audio1-scrub-fill"></div>
+        </div>
+      </div>
+
+      <!-- Botón para volver al menú principal -->
+      <div style="margin-top: 18px;">
+        <button type="button" class="btn" onclick="returnToMenuFromAudios()" style="font-size: 1.15rem; padding: 10px 18px;">
+          <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+          <span>Volver al menú</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==============================================
          FASE INTRO / AVISO DE RETOS CON TEXTO ESCRIBIÉNDOSE
     =============================================== -->
     <div class="card hidden" id="intro-card">
@@ -1004,6 +1414,12 @@
           <span>Comenzar reto 1</span>
           <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
         </button>
+        <div style="margin-top: 10px;">
+          <button type="button" onclick="returnToMenuFromReto()" style="background: transparent; border: none; font-family: 'Patrick Hand', cursive; font-size: 1.1rem; color: #71717a; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px;">
+            <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i>
+            <span>Volver al menú</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1283,6 +1699,9 @@
   <!-- Elemento de audio en bucle -->
   <audio id="bg-music" src="leberch-love-story-437006.mp3" preload="auto" loop></audio>
 
+  <!-- Audio especial del módulo Audios -->
+  <audio id="love-audio" src="Love.mp3" preload="auto"></audio>
+
   <!-- Botón flotante para pausar / reanudar música -->
   <button type="button" id="music-toggle-btn" class="music-toggle-btn hidden" onclick="toggleMusic()" title="Silenciar / Activar música">
     <i data-lucide="volume-2" id="music-icon" style="width: 18px; height: 18px; stroke-width: 2;"></i>
@@ -1422,6 +1841,318 @@
       }
     }
 
+    function pauseBackgroundMusic() {
+      const music = document.getElementById('bg-music');
+      if (music && !music.paused) {
+        music.pause();
+      }
+      const musicBtn = document.getElementById('music-toggle-btn');
+      if (musicBtn) {
+        musicBtn.classList.remove('playing');
+      }
+    }
+
+    /* ==========================================================
+       NAVEGACIÓN ENTRE MENÚ, AUDIOS Y EL RETO
+    ========================================================== */
+    function openAudiosModule() {
+      // Pausar música de fondo si estuviera activa
+      pauseBackgroundMusic();
+
+      const menuCard = document.getElementById('menu-card');
+      menuCard.classList.add('hidden');
+
+      const audiosCard = document.getElementById('audios-card');
+      audiosCard.classList.remove('hidden');
+      audiosCard.classList.add('fade-enter');
+      lucide.createIcons();
+
+      initAudiosModule();
+    }
+
+    function returnToMenuFromAudios() {
+      pauseLoveAudio();
+
+      const audiosCard = document.getElementById('audios-card');
+      audiosCard.classList.add('hidden');
+
+      const menuCard = document.getElementById('menu-card');
+      menuCard.classList.remove('hidden');
+      menuCard.classList.add('fade-enter');
+      lucide.createIcons();
+    }
+
+    function startRetoFlow() {
+      // Pausar audio 1 si estaba sonando
+      pauseLoveAudio();
+
+      const menuCard = document.getElementById('menu-card');
+      menuCard.classList.add('hidden');
+
+      const introCard = document.getElementById('intro-card');
+      introCard.classList.remove('hidden');
+      introCard.classList.add('fade-enter');
+      lucide.createIcons();
+
+      // Aquí sí inicia la música de fondo guardada en bucle para los retos
+      playBackgroundMusic();
+
+      startTypewriterIntro();
+    }
+
+    function returnToMenuFromReto() {
+      pauseBackgroundMusic();
+
+      document.getElementById('intro-card').classList.add('hidden');
+      const menuCard = document.getElementById('menu-card');
+      menuCard.classList.remove('hidden');
+      menuCard.classList.add('fade-enter');
+      lucide.createIcons();
+    }
+
+    /* ==========================================================
+       MÓDULO DE AUDIO 1 Y ANIMACIÓN DE CORAZONES SUAVES
+    ========================================================== */
+    let heartsAnimationId = null;
+    let heartsList = [];
+    let isLoveAudioPlaying = false;
+    let lastHeartSpawnTime = 0;
+
+    function initAudiosModule() {
+      const audio = document.getElementById('love-audio');
+
+      if (audio && !audio._eventsAttached) {
+        audio.addEventListener('timeupdate', updateAudioProgress);
+        audio.addEventListener('loadedmetadata', updateAudioDuration);
+        audio.addEventListener('ended', onLoveAudioEnded);
+        audio._eventsAttached = true;
+      }
+
+      if (audio && audio.duration) {
+        updateAudioDuration();
+      }
+
+      setupHeartsCanvas();
+    }
+
+    function updateAudioDuration() {
+      const audio = document.getElementById('love-audio');
+      const timer = document.getElementById('audio1-timer');
+      if (!audio || !timer) return;
+      const duration = audio.duration || 0;
+      const current = audio.currentTime || 0;
+      timer.textContent = `${formatAudioTime(current)} / ${formatAudioTime(duration)}`;
+    }
+
+    function updateAudioProgress() {
+      const audio = document.getElementById('love-audio');
+      const fill = document.getElementById('audio1-scrub-fill');
+      const timer = document.getElementById('audio1-timer');
+      if (!audio) return;
+
+      const current = audio.currentTime || 0;
+      const duration = audio.duration || 0;
+
+      if (timer) {
+        timer.textContent = `${formatAudioTime(current)} / ${formatAudioTime(duration)}`;
+      }
+
+      if (fill && duration > 0) {
+        const pct = (current / duration) * 100;
+        fill.style.width = `${pct}%`;
+      }
+    }
+
+    function formatAudioTime(seconds) {
+      if (isNaN(seconds) || seconds === Infinity) return "00:00";
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function seekLoveAudio(e) {
+      const audio = document.getElementById('love-audio');
+      const bar = document.getElementById('audio1-scrub-bar');
+      if (!audio || !bar || !audio.duration) return;
+
+      const rect = bar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = Math.max(0, Math.min(1, clickX / rect.width));
+      audio.currentTime = pct * audio.duration;
+      updateAudioProgress();
+    }
+
+    function toggleLoveAudio() {
+      const audio = document.getElementById('love-audio');
+      const playBtn = document.getElementById('audio1-play-btn');
+      const hint = document.getElementById('audio1-hint');
+
+      if (!audio) return;
+
+      // Asegurarse de que la música de fondo esté pausada
+      pauseBackgroundMusic();
+
+      if (audio.paused) {
+        audio.play().then(() => {
+          isLoveAudioPlaying = true;
+          if (playBtn) {
+            playBtn.classList.add('playing');
+            playBtn.innerHTML = '<i data-lucide="pause" id="audio1-play-icon" style="width: 28px; height: 28px; fill: #18181b;"></i>';
+            lucide.createIcons();
+          }
+          if (hint) hint.textContent = "Reproduciendo mensaje...";
+          startHeartsAnimation();
+        }).catch(err => {
+          console.log("Error al reproducir Love.mp3:", err);
+        });
+      } else {
+        pauseLoveAudio();
+      }
+    }
+
+    function pauseLoveAudio() {
+      const audio = document.getElementById('love-audio');
+      const playBtn = document.getElementById('audio1-play-btn');
+      const hint = document.getElementById('audio1-hint');
+
+      if (audio && !audio.paused) {
+        audio.pause();
+      }
+
+      isLoveAudioPlaying = false;
+
+      if (playBtn) {
+        playBtn.classList.remove('playing');
+        playBtn.innerHTML = '<i data-lucide="play" id="audio1-play-icon" style="width: 28px; height: 28px; fill: #18181b; margin-left: 3px;"></i>';
+        lucide.createIcons();
+      }
+
+      if (hint) hint.textContent = "Presiona play para continuar";
+    }
+
+    function onLoveAudioEnded() {
+      pauseLoveAudio();
+      const audio = document.getElementById('love-audio');
+      const hint = document.getElementById('audio1-hint');
+      const fill = document.getElementById('audio1-scrub-fill');
+
+      if (audio) audio.currentTime = 0;
+      if (fill) fill.style.width = '0%';
+      if (hint) hint.textContent = "Audio completado :)";
+
+      // Celebración suave al terminar el audio
+      confetti({
+        particleCount: 35,
+        spread: 60,
+        origin: { y: 0.6 },
+        colors: ['#18181b', '#71717a', '#d4d4d8', '#ffffff']
+      });
+    }
+
+    /* Animación de corazones suaves minimalistas en Canvas */
+    function setupHeartsCanvas() {
+      const canvas = document.getElementById('hearts-canvas');
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+      }
+    }
+
+    function createHeartParticle(canvasWidth, canvasHeight) {
+      return {
+        x: Math.random() * (canvasWidth - 50) + 25,
+        y: canvasHeight + 8,
+        size: Math.random() * 8 + 12, // tamaño delicado
+        vy: -(Math.random() * 0.55 + 0.55), // velocidad pausada y suave
+        swaySpeed: Math.random() * 0.03 + 0.02,
+        swayOffset: Math.random() * Math.PI * 2,
+        rotation: (Math.random() - 0.5) * 0.25,
+        opacity: 0,
+        maxOpacity: Math.random() * 0.35 + 0.45,
+        life: 0,
+        maxLife: Math.random() * 60 + 130
+      };
+    }
+
+    function drawMinimalistHeart(ctx, x, y, size, opacity, rotation) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.scale(size / 30, size / 30);
+      ctx.beginPath();
+      ctx.moveTo(0, -6);
+      ctx.bezierCurveTo(-12, -18, -20, -4, -20, 6);
+      ctx.bezierCurveTo(-20, 16, -10, 24, 0, 32);
+      ctx.bezierCurveTo(10, 24, 20, 16, 20, 6);
+      ctx.bezierCurveTo(20, -4, 12, -18, 0, -6);
+      ctx.closePath();
+
+      // Relleno sutil con opacidad baja
+      ctx.fillStyle = `rgba(24, 24, 27, ${opacity * 0.12})`;
+      ctx.fill();
+
+      // Trazo de contorno limpio
+      ctx.strokeStyle = `rgba(24, 24, 27, ${opacity * 0.8})`;
+      ctx.lineWidth = 1.8;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function animateHearts(timestamp) {
+      const canvas = document.getElementById('hearts-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Si está reproduciendo, generar corazones cada 280ms
+      if (isLoveAudioPlaying) {
+        if (!lastHeartSpawnTime || timestamp - lastHeartSpawnTime > 280) {
+          heartsList.push(createHeartParticle(canvas.width, canvas.height));
+          lastHeartSpawnTime = timestamp;
+        }
+      }
+
+      // Actualizar y dibujar cada corazón
+      for (let i = heartsList.length - 1; i >= 0; i--) {
+        const h = heartsList[i];
+        h.life++;
+        h.y += h.vy;
+        h.x += Math.sin(h.life * h.swaySpeed + h.swayOffset) * 0.45;
+
+        // Fade in al inicio y fade out al final
+        if (h.life < 20) {
+          h.opacity = (h.life / 20) * h.maxOpacity;
+        } else if (h.life > h.maxLife - 30) {
+          h.opacity = ((h.maxLife - h.life) / 30) * h.maxOpacity;
+        } else {
+          h.opacity = h.maxOpacity;
+        }
+
+        drawMinimalistHeart(ctx, h.x, h.y, h.size, Math.max(0, h.opacity), h.rotation);
+
+        if (h.life >= h.maxLife || h.y < -30) {
+          heartsList.splice(i, 1);
+        }
+      }
+
+      if (isLoveAudioPlaying || heartsList.length > 0) {
+        heartsAnimationId = requestAnimationFrame(animateHearts);
+      } else {
+        heartsAnimationId = null;
+      }
+    }
+
+    function startHeartsAnimation() {
+      if (!heartsAnimationId) {
+        setupHeartsCanvas();
+        heartsAnimationId = requestAnimationFrame(animateHearts);
+      }
+    }
+
     function checkAnswer(e) {
       e.preventDefault();
       const input = document.getElementById('answer-input');
@@ -1444,9 +2175,6 @@
       if (isMatch) {
         showFeedback("Respuesta correcta. Abriendo...", "feedback-success", "check");
 
-        // Iniciar música de fondo en bucle tras superar la contraseña
-        playBackgroundMusic();
-        
         confetti({
           particleCount: 35,
           spread: 50,
@@ -1460,11 +2188,10 @@
 
         setTimeout(() => {
           card.classList.add('hidden');
-          const introCard = document.getElementById('intro-card');
-          introCard.classList.remove('hidden');
-          introCard.classList.add('fade-enter');
+          const menuCard = document.getElementById('menu-card');
+          menuCard.classList.remove('hidden');
+          menuCard.classList.add('fade-enter');
           lucide.createIcons();
-          startTypewriterIntro();
         }, 850);
 
       } else {
